@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Service
 public class FacultyService {
+
     private final Map<Long, Faculty> facultys = new HashMap<>();
     private long generatedFacultyId = 1L;
     public long facultyId = 0;
