@@ -25,7 +25,6 @@ public class FacultyService {
 
     public Faculty updateFaculty(long FacultyId, Faculty faculty) {
         return facultyRepository.save(faculty);
-
     }
 
     public String getByColor(String color) {
