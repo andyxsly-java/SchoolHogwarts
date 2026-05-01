@@ -1,13 +1,12 @@
 package ru.hogwarts.school.service;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.Collection;
-import java.util.List;
 
 @Service
 public class FacultyService {
@@ -36,5 +35,13 @@ public class FacultyService {
     }
 
     public void deleteFaculty(long facultyId) {
+    }
+
+    public Collection<Faculty> findFacultyByColorIgnoreCase(String color) {
+        return facultyRepository.findFacultyByColorIgnoreCase(color);
+    }
+
+    public String findFacultyByColor(String color) {
+        return color;
     }
 }

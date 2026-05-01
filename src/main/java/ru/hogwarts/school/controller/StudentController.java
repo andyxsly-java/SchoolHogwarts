@@ -33,9 +33,10 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<Student>> getAllStudents() {
-        return ResponseEntity.ok(studentService.getAllStudents());
+    public ResponseEntity findByAge(@RequestParam(required = false) int min, @RequestParam(required = false) int max) {
+            return ResponseEntity.ok(studentService.findByAgeBetween(min, max));
     }
+
     @PutMapping()
     public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
         Student updatedStudent = studentService.updateStudent(student);

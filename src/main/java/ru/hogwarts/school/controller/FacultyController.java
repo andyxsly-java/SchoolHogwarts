@@ -6,7 +6,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 import java.util.Collection;
 
-@RequestMapping("facultys")
+@RequestMapping("faculties")
 @RestController
 public class FacultyController {
 
@@ -18,14 +18,17 @@ public class FacultyController {
 
     @PostMapping
     public ResponseEntity<Faculty> createFaculty(@RequestBody Faculty faculty) {
-        Faculty createdFactulty = facultyService.createFaculty(faculty);
-        return ResponseEntity.ok(createdFactulty);
+        Faculty createdFaculty = facultyService.createFaculty(faculty);
+        return ResponseEntity.ok(createdFaculty);
     }
 
     @GetMapping("/color")
-    public String getByColor(@RequestParam String color) {
-        return facultyService.getByColor(color);
+    public ResponseEntity findFacultyByColor(@RequestParam(required = false) String color) {
+        if (color != null && !color.isBlank()) {
+            return ResponseEntity.ok(facultyService.findFacultyByColor(color));
     }
+        return ResponseEntity.ok(facultyService.getByColor(color));
+}
 
     @GetMapping
     public ResponseEntity<Collection<Faculty>> getAllFacultys() {
