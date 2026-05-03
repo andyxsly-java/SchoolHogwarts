@@ -44,4 +44,8 @@ public class FacultyService {
     public String findFacultyByColor(String color) {
         return color;
     }
+
+    public Faculty findFaculty(Long id) {
+        return findFaculty(id);
+    }
 }

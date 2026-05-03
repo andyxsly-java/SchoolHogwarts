@@ -13,9 +13,11 @@ public class Student {
     private String name;
     private int age;
 
+    @FetchType.LAZY
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
+
 
     public Student (Long id, String name, int age) {
         this.id = id;

@@ -16,6 +16,12 @@ public class FacultyController {
         this.facultyService = facultyService;
     }
 
+    @GetMapping("/{id}/students")
+    public Faculty getStudentsByFacultyId(@PathVariable Long id) {
+        return facultyService.findFaculty(id);
+    }
+
+
     @PostMapping
     public ResponseEntity<Faculty> createFaculty(@RequestBody Faculty faculty) {
         Faculty createdFaculty = facultyService.createFaculty(faculty);
