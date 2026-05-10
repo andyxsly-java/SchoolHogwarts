@@ -1,10 +1,14 @@
 package ru.hogwarts.school.model;
 
 import jakarta.persistence.*;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 public class Student {
-
+    
+    
     @Id
     @GeneratedValue
     private long id;
@@ -13,7 +17,6 @@ public class Student {
     private String name;
     private int age;
 
-    @FetchType.LAZY
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
