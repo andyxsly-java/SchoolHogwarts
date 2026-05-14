@@ -1,8 +1,10 @@
 package ru.hogwarts.school.controller;
 
+import jakarta.persistence.Id;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 import java.util.Collection;
 
@@ -36,9 +38,14 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.getByColor(color));
 }
 
-    @GetMapping
-    public ResponseEntity<Collection<Faculty>> getAllFacultys() {
-        return ResponseEntity.ok(facultyService.getAllFacultys());
+    @GetMapping("{id}")
+    public ResponseEntity<Faculty> getFaculty (@PathVariable long facultyId) {
+        Faculty faculty = facultyService.findFaculty(facultyId);
+        if (faculty == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(faculty);
+
     }
 
     @PutMapping()
@@ -55,4 +62,6 @@ public class FacultyController {
         facultyService.deleteFaculty(facultyId);
         return ResponseEntity.ok().build();
     }
+
+
 }

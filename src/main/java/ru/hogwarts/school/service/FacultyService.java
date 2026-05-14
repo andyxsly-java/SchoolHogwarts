@@ -1,6 +1,5 @@
 package ru.hogwarts.school.service;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
@@ -38,7 +37,7 @@ public class FacultyService {
     }
 
     public Collection<Faculty> findFacultyByColorIgnoreCase(String color) {
-        return facultyRepository.findByNameContainingIgnoreCaseOrColorContainingIgnoreCase(color);
+        return facultyRepository.findByColorContainingIgnoreCase(color);
     }
 
     public String findFacultyByColor(String color) {
@@ -48,4 +47,5 @@ public class FacultyService {
     public Faculty findFaculty(Long id) {
         return findFaculty(id);
     }
+
 }

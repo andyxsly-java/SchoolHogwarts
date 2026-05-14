@@ -4,14 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
-import org.jspecify.annotations.Nullable;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
 import ru.hogwarts.school.model.Student;
 
 @Entity
 public class Avatar {
-    @Id
     @GeneratedValue
+    @Id
     private Long id;
     private String filePath;
     private long fileSize;
