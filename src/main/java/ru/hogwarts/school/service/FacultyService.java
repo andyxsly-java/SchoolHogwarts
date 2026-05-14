@@ -1,6 +1,5 @@
 package ru.hogwarts.school.service;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
@@ -30,7 +29,7 @@ public class FacultyService {
         return color;
     }
 
-    public Collection<Faculty> getAllFacultys() {
+    public Collection<Faculty> getFaculty() {
         return facultyRepository.findAll();
     }
 

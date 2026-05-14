@@ -37,8 +37,8 @@ public class FacultyController {
 }
 
     @GetMapping
-    public ResponseEntity<Collection<Faculty>> getAllFacultys() {
-        return ResponseEntity.ok(facultyService.getAllFacultys());
+    public ResponseEntity<Collection<Faculty>> getFaculty() {
+        return ResponseEntity.ok(facultyService.getFaculty());
     }
 
     @PutMapping()
