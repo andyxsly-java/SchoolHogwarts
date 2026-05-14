@@ -45,17 +45,16 @@ public class SchoolApplicationTest {
 
     @Test
     public void testPostObject() throws Exception {
-        Student student = new Student (5L,"Волан-де-Морт", 126);
-        student.setName("Волан-де-Морт");
+        Faculty faculty = new Faculty (5L,"Пятый факультет", "чёрный");
         Assertions
-                .assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/", student, String.class))
+                .assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/", faculty, String.class))
                 .isNotNull();
     }
 
     @Test
     public void testPostStudents() throws Exception {
-        Student student = new Student (5L,"Волан-де-Морт", 126);
-        student.setName("Волан-де-Морт");
+        Faculty faculty = new Faculty (5L,"Пятый факультет", "чёрный");
+        faculty.setName();
         Assertions
                 .assertThat(this.facultyController.createFaculty(new Faculty(5L, "Пятый факультет", "чёрный")));
     }
