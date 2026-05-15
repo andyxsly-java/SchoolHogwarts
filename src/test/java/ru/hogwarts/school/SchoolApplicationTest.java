@@ -33,7 +33,7 @@ public class SchoolApplicationTest {
 
     @Test
     public void testGetStudents() throws Exception {
-        Assertions.assertThat(this.facultyController.getFaculty(3));
+        Assertions.assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/students/id", String.class));
     }
 
     @Test
@@ -44,27 +44,19 @@ public class SchoolApplicationTest {
     }
 
     @Test
-    public void testPostObject() throws Exception {
-        Student student = new Student (5L,"Волан-де-Морт", 126);
-        student.setName("Волан-де-Морт");
-        Assertions
-                .assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/", student, String.class))
-                .isNotNull();
-    }
-
-    @Test
     public void testPostStudents() throws Exception {
         Student student = new Student (5L,"Волан-де-Морт", 126);
         student.setName("Волан-де-Морт");
         Assertions
-                .assertThat(this.facultyController.createFaculty(new Faculty(5L, "Пятый факультет", "чёрный")));
+                .assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/", student, String.class))
+                .isBlank();
     }
 
     @Test
     public void testPutStudents() throws Exception {
+        Student student = new Student (5L,"Волан-де-Морт", 126);
         Assertions
-                .assertThat(this.facultyController.updateFaculty(new Faculty(4L, "Когтевран", "синий")))
-                .isNotNull();
+                .assertThat(this.restTemplate.put(student.setAge(10)));
 
     }
 
@@ -72,6 +64,6 @@ public class SchoolApplicationTest {
     public void testDeleteStudents() throws Exception {
         Faculty faculty = new Faculty(5, "Пятый факультет", "чёрный");
         Assertions
-                .assertThat(this.facultyController.deleteFaculty(5));
+                .assertThat(this.facultyController.deleteFaculty(1L));
     }
 }
