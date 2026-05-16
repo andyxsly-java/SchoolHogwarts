@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
-@RequestMapping("student")
+@RequestMapping("/students")
 @RestController
 public class StudentController {
     private final StudentService studentService;
@@ -35,7 +35,7 @@ public class StudentController {
             return ResponseEntity.ok(studentService.findByAgeBetween(min, max));
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
         Student createdStudent = studentService.createStudent(student);
         return ResponseEntity.ok(createdStudent);

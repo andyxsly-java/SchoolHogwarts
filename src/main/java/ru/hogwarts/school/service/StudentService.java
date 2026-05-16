@@ -32,8 +32,8 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public void deleteStudent(long studentId) {
-        studentRepository.delete(studentId);
+    public void deleteStudent(long id) {
+        studentRepository.deleteById(id);
     }
 
     public List<Student> findByAge(int age) {

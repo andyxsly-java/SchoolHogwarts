@@ -1,18 +1,15 @@
 package ru.hogwarts.school.avatars;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToOne;
-import org.jspecify.annotations.Nullable;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
 import ru.hogwarts.school.model.Student;
 
 @Entity
 public class Avatar {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
+
     private String filePath;
     private long fileSize;
     private String mediaType;
@@ -22,6 +19,9 @@ public class Avatar {
 
     @OneToOne
     private Student student;
+
+    public Avatar() {
+    }
 
     public long getId() {
         return id;

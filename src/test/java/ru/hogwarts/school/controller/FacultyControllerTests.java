@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FacultyControllerTests {
@@ -27,45 +31,50 @@ public class FacultyControllerTests {
     }
 
     @Test
-    public void testGetStudents() throws Exception {
-        Assertions.assertThat(this.facultyController.getFaculty());
-    }
-
-    @Test
-    public void testGetObject() throws Exception {
+    public void testGetFaculty() throws Exception {
         Assertions
-                .assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/students/id", String.class))
+                .assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/faculties", String.class))
                 .isNotEmpty();
     }
 
     @Test
-    public void testPostObject() throws Exception {
+    public void testPostFaculty() throws Exception {
+        Faculty faculty = new Faculty(5L,"Пятый факультет", "чёрный");
+        Assertions
+                .assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/faculties/5", faculty, String.class))
+                .isNotBlank();
+    }
+
+    @Test
+    public void testPostFaculties() throws Exception {
+        Faculty faculty = new Faculty();
+        faculty.setName("Пятый факультет");
+        faculty.setColor("чёрный");
+        ResponseEntity<Faculty> response = restTemplate.postForEntity("http://localhost:" + port + "/facul", faculty, Faculty.class);
+        Assertions.assertThat(response.getStatusCode().value())
+                .isEqualTo(200);
+
+    }
+
+    @Test
+    public void testPutFaculty() throws Exception {
         Faculty faculty = new Faculty (5L,"Пятый факультет", "чёрный");
-        Assertions
-                .assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/", faculty, String.class))
-                .isNotNull();
+
+                ResponseEntity<Faculty> response = restTemplate.exchange(
+                        "http://localhost:" + port + "/faculties",
+                        HttpMethod.PUT,
+                        new HttpEntity<>(faculty),
+                        Faculty.class);
+        Assertions.assertThat(response.getBody())
+            .isNotNull();
     }
 
     @Test
-    public void testPostStudents() throws Exception {
-        Faculty faculty = new Faculty (5L,"Пятый факультет", "чёрный");
-        faculty.setName();
+    public void testDeleteFaculty() throws Exception {
+        Faculty faculty = new Faculty(5L, "Пятый факультет", "чёрный");
         Assertions
-                .assertThat(this.facultyController.createFaculty(new Faculty(5L, "Пятый факультет", "чёрный")));
-    }
-
-    @Test
-    public void testPutStudents() throws Exception {
-        Assertions
-                .assertThat(this.facultyController.updateFaculty(new Faculty(4L, "Когтевран", "синий")))
-                .isNotNull();
-
-    }
-
-    @Test
-    public void testDeleteStudents() throws Exception {
-        Faculty faculty = new Faculty(5, "Пятый факультет", "чёрный");
-        Assertions
-                .assertThat(this.facultyController.deleteFaculty(5));
+                .assertThatCode(()->this.restTemplate.delete("http://localhost:" + port + "/faculties/5"))
+                .doesNotThrowAnyException();
     }
 }
+

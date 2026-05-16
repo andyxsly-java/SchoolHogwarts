@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -27,46 +31,42 @@ public class SchoolControllerTests {
     }
 
     @Test
-    public void testGetStudents() throws Exception {
-        Assertions.assertThat(this.studentController.getStudent(1));
-    }
-
-    @Test
-    public void testGetObject() throws Exception {
-        Assertions
-                .assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/students/id", String.class))
-                .isNotEmpty();
-    }
-
-    @Test
-    public void testPostObject() throws Exception {
+    public void testPostStudent() throws Exception {
         Student student = new Student (5L,"Волан-де-Морт", 126);
-        student.setName("Волан-де-Морт");
         Assertions
-                .assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/", student, String.class))
-                .isNotNull();
+                .assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/students", student, String.class))
+                .isNotBlank();
     }
 
     @Test
     public void testPostStudents() throws Exception {
-        Student student = new Student (5L,"Волан-де-Морт", 126);
+        Student student = new Student();
         student.setName("Волан-де-Морт");
-        Assertions
-                .assertThat(this.studentController.createStudent(new Student(5L, "Волан-де-Морт", 126)));
+        student.setAge(126);
+        ResponseEntity<Student> response = restTemplate.postForEntity("http://localhost:" + port + "/stud", student, Student.class);
+        Assertions.assertThat(response.getStatusCode().value())
+                .isEqualTo(200);
+
     }
 
     @Test
-    public void testPutStudents() throws Exception {
-        Assertions
-                .assertThat(this.studentController.updateStudent(new Student(4L, "Невилл Долгопупс", 10)))
+    public void testPutStudent() throws Exception {
+        Student student = new Student (5L,"Волан-де-Морт", 126);
+
+        ResponseEntity<Student> response = restTemplate.exchange(
+                "http://localhost:" + port + "/students",
+                HttpMethod.PUT,
+                new HttpEntity<>(student),
+                Student.class);
+        Assertions.assertThat(response.getBody())
                 .isNotNull();
-
     }
 
     @Test
-    public void testDeleteStudents() throws Exception {
+    public void testDeleteStudent() throws Exception {
+        Student student = new Student(5L, "Волан-де-Морт", 126);
         Assertions
-                .assertThat(this.studentController.deleteStudent(new Student(5L, "Волан-де-Морт", 126).getId()))
-                .toString();
+                .assertThatCode(()->this.restTemplate.delete("http://localhost:" + port + "/students/5"))
+                .doesNotThrowAnyException();
     }
 }

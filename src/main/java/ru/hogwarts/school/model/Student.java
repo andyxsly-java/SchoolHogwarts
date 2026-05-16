@@ -1,5 +1,6 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,8 +20,12 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "faculty_id")
+    @JsonBackReference
     private Faculty faculty;
 
+    public Student() {
+
+    }
 
     public Student (Long id, String name, int age) {
         this.id = id;
@@ -42,11 +47,11 @@ public class Student {
         this.name = name;
     }
 
-    private int getAge() {
+    public int getAge() {
         return age;
     }
 
-    private void setAge(int age) {
+    public void setAge(int age) {
         this.age = age;
     }
 }

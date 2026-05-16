@@ -7,8 +7,6 @@ import java.util.List;
 public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findByAge(int age);
 
-    void delete(long studentId);
-
     Student findByAgeBetween(int min, int max);
 }
 
