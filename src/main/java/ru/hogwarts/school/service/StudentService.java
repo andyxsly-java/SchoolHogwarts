@@ -28,12 +28,12 @@ public class StudentService {
         return studentRepository.getById(studentId);
     }
 
-    public Student updateStudent(String name, Student student) {
+    public Student updateStudent(Student student) {
         return studentRepository.save(student);
     }
 
-    public void deleteStudent(Student student) {
-        studentRepository.delete(student);
+    public void deleteStudent(long id) {
+        studentRepository.deleteById(id);
     }
 
     public List<Student> findByAge(int age) {
