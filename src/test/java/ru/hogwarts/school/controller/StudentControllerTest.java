@@ -93,6 +93,4 @@ public class StudentControllerTest {
         mockMvc.perform(delete("/students/1"))
                 .andExpect(status().isOk());
     }
-
-
 }
