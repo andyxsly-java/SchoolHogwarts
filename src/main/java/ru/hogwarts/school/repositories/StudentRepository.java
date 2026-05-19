@@ -12,10 +12,14 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Student findByAgeBetween(int min, int max);
 
     @Query(value = "SELECT COUNT(*) FROM student", nativeQuery = true)
-    List<Student> getAllStudents();
+    long count();
 
     @Query(value = "SELECT AVG(age) FROM student", nativeQuery = true)
-    List<Student> findByAge();
+    Double getAverageAge();
+
+    @Query(value = "SELECT * FROM students ORDER BY id DESC LIMIT 5", nativeQuery = true)
+    List<Student> getLastStudents();
+
 
 }
 

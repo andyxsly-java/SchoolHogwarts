@@ -36,12 +36,17 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public List<Student> findByAge(int age) {
-        return studentRepository.findByAge();
+    public long getStudentsCount() {
+        return studentRepository.count();
     }
 
-    public Collection<Student> getAllStudents() {
-        return studentRepository.getAllStudents();
+    public double getAverageAge() {
+        Double averageAge = studentRepository.getAverageAge();
+        return averageAge != null ? averageAge: 0.0;
+    }
+
+    public List<Student> getLastStudents() {
+        return studentRepository.getLastStudents();
     }
 
     public Student findByAgeBetween(int min, int max) {

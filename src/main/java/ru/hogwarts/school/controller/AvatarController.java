@@ -4,10 +4,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.avatars.Avatar;
 import ru.hogwarts.school.model.Student;
@@ -22,6 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+@RequestMapping("avatars")
+@RestController
 public class AvatarController {
 
     private final AvatarService avatarService;
