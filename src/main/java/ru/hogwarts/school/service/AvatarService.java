@@ -2,6 +2,8 @@ package ru.hogwarts.school.service;
 
 import jakarta.transaction.Transactional;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Transactional
 public class AvatarService {
 
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
@@ -37,11 +41,13 @@ public class AvatarService {
     }
 
     public List<Avatar> getAllAvatars(int pageNumber, int pageSize) {
+        logger.info("Was invoked method for get all avatars");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
 
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
+        logger.error("No student with id" + studentId);
         Student student = studentService.findStudent(studentId);
 
 
@@ -68,17 +74,18 @@ public class AvatarService {
     }
 
 
-
-
     public Avatar findAvatar(Long studentId) {
+        logger.info("Was invoked method for find avatar by student id");
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
     private byte[] generateImagePreview(Path filePath) throws IOException {
+        logger.error("No image with file path" + filePath);
         try (InputStream is = Files.newInputStream(filePath);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             BufferedImage image = ImageIO.read(bis);
 
+            logger.debug("Was invoked method for find avatar by student id");
             int height = image.getHeight() / (image.getWidth() / 100);
             BufferedImage preview = new BufferedImage(100, height, image.getType());
             Graphics2D graphics = preview.createGraphics();
@@ -91,6 +98,7 @@ public class AvatarService {
     }
 
     private String getExtension(Path name, String fileName) {
+        logger.info("Was invoked method for get extension file");
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }
