@@ -3,6 +3,11 @@ package ru.hogwarts.school;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.StudentRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SpringBootApplication

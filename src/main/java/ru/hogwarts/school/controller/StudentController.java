@@ -4,14 +4,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/students")
 @RestController
 public class StudentController {
     private final StudentService studentService;
+    private StudentRepository studentRepository;
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -50,6 +53,31 @@ public class StudentController {
     public List<Student> getLastStudents() {
         return studentService.getLastStudents();
     }
+
+
+    @GetMapping("/sortedNameStartingWithA")
+    public ResponseEntity<List<String>> findAll() {
+        List<Student> students = studentRepository.findAll();
+
+        List<String> sortedNameStartingWithA = students.stream()
+                .filter(student -> student.getName().toUpperCase().startsWith("A"))
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .sorted()
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(sortedNameStartingWithA);
+    }
+
+    @GetMapping("/averageAge")
+    public ResponseEntity<Double> findAverageAge() {
+        List<Student> students = studentRepository.findAll();
+
+        double averageAge = students.stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElseThrow();
+        return ResponseEntity.ok(averageAge);
+        }
 
     @PostMapping("")
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
