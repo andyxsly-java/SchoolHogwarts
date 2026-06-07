@@ -14,10 +14,11 @@ import java.util.List;
 public class FacultyController {
 
     private final FacultyService facultyService;
-    private FacultyRepository facultyRepository;
+    private final FacultyRepository facultyRepository;
 
-    public FacultyController(FacultyService facultyService) {
+    public FacultyController(FacultyService facultyService, FacultyRepository facultyRepository) {
         this.facultyService = facultyService;
+        this.facultyRepository = facultyRepository;
     }
 
     @GetMapping("/{id}/students")
@@ -53,7 +54,7 @@ public class FacultyController {
         String longestFaculty = faculties.stream()
                 .map(Faculty::getName)
                 .max(Comparator.comparingInt(String::length))
-                .orElseThrow();
+                .orElse(null);
                 return ResponseEntity.ok(longestFaculty);
     }
 

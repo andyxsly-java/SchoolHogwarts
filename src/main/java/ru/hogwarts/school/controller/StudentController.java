@@ -14,10 +14,11 @@ import java.util.stream.Collectors;
 @RestController
 public class StudentController {
     private final StudentService studentService;
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, StudentRepository studentRepository) {
         this.studentService = studentService;
+        this.studentRepository = studentRepository;
     }
 
     @GetMapping("{id}/faculty")
@@ -60,9 +61,9 @@ public class StudentController {
         List<Student> students = studentRepository.findAll();
 
         List<String> sortedNameStartingWithA = students.stream()
-                .filter(student -> student.getName().toUpperCase().startsWith("A"))
                 .map(Student::getName)
                 .map(String::toUpperCase)
+                .filter(name -> name.startsWith("A"))
                 .sorted()
                 .collect(Collectors.toList());
         return ResponseEntity.ok(sortedNameStartingWithA);
@@ -75,7 +76,7 @@ public class StudentController {
         double averageAge = students.stream()
                 .mapToInt(Student::getAge)
                 .average()
-                .orElseThrow();
+                .orElse(0);
         return ResponseEntity.ok(averageAge);
         }
 
