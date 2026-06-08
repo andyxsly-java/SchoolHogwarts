@@ -27,7 +27,7 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Student> getStudent (@PathVariable long studentId) {
+    public ResponseEntity<Student> getStudent(@PathVariable long studentId) {
         Student student = studentService.getStudentById(studentId);
         if (student == null) {
             return ResponseEntity.notFound().build();
@@ -37,7 +37,7 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity findByAge(@RequestParam(required = false) int min, @RequestParam(required = false) int max) {
-            return ResponseEntity.ok(studentService.findByAgeBetween(min, max));
+        return ResponseEntity.ok(studentService.findByAgeBetween(min, max));
     }
 
     @GetMapping("/count")
@@ -78,7 +78,64 @@ public class StudentController {
                 .average()
                 .orElse(0);
         return ResponseEntity.ok(averageAge);
+    }
+
+    @GetMapping("/students/print-parallel")
+    public ResponseEntity<String> getStudentsParallel() {
+        List<Student> students = studentRepository.findAll();
+
+        students.subList(1, 2)
+                .forEach(student -> System.out.println(
+                        Thread.currentThread().getName() + " -> " + student.getName()
+                ));
+
+        Thread thread1 = new Thread(() ->
+                students.subList(3, 4)
+                        .forEach(student -> System.out.println(
+                                Thread.currentThread().getName() + " -> " + student.getName()
+                        ))
+        );
+
+        Thread thread2 = new Thread(() ->
+                students.subList(5, 6)
+                        .forEach(student -> System.out.println(
+                                Thread.currentThread().getName() + " -> " + student.getName()
+                        ))
+        );
+
+        thread1.start();
+        thread2.start();
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/students/print-synchronized")
+    public ResponseEntity<String> getStudentsSyn(String name) {
+        List<Student> students = studentRepository.findAll();
+
+        if (students.size() < 6) {
+            return ResponseEntity.badRequest().build();
         }
+
+        students.subList(1, 2)
+                .forEach(student -> getStudentsSyn(student.getName()));
+
+        Thread thread1 = new Thread(() ->
+                students.subList(3, 4)
+                        .forEach(student -> getStudentsSyn(student.getName()))
+        );
+
+        Thread thread2 = new Thread(() ->
+                students.subList(5, 6)
+                        .forEach(student -> getStudentsSyn(student.getName()))
+        );
+
+        thread1.start();
+        thread2.start();
+
+        return ResponseEntity.ok().build();
+
+    }
 
     @PostMapping("")
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
