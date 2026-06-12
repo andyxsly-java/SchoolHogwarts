@@ -1,40 +1,63 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class FacultyService {
-    private final Map<Long, Faculty> facultys = new HashMap<>();
-    private long generatedFacultyId = 1L;
-    public long facultyId = 0;
+
+    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+
+    @Autowired
+    private FacultyRepository facultyRepository;
+
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     public Faculty createFaculty(Faculty faculty) {
-        facultys. put(generatedFacultyId, faculty);
-        generatedFacultyId++;
-        return faculty;
+        logger.info("Was invoked method for create faculty");
+        return facultyRepository.save(faculty);
     }
 
-    public Faculty getFacultyById(long facultyId) {
-        return facultys.get(facultyId);
+    public Faculty updateFaculty(long FacultyId, Faculty faculty) {
+        logger.info("Was invoked method for update faculty");
+        return facultyRepository.save(faculty);
     }
 
-    public Faculty updateFaculty(long facultyId, Faculty faculty) {
-        this.facultyId = facultyId;
-        facultys.put(generatedFacultyId, faculty);
-        return faculty;
+    public String getByColor(String color) {
+        logger.info("Was invoked method for get color");
+        return color;
     }
 
-    public Faculty deleteFaculty(long facultyId) {
-        return facultys.remove(facultyId);
+    public Collection<Faculty> getFaculty() {
+        logger.info("Was invoked method for get faculty");
+        return facultyRepository.findAll();
     }
 
-    public Collection<Faculty> getAllFacultys() {
-        return facultys.values();
+    public long deleteFaculty(long id) {
+        logger.info("Was invoked method for delete faculty");
+        return id;
+    }
+
+    public Collection<Faculty> findFacultyByColorIgnoreCase(String name, String color) {
+        logger.info("Was invoked method for find faculty by name or color ignore containing case");
+        return facultyRepository.findByNameContainingIgnoreCaseOrColorContainingIgnoreCase(name, color);
+    }
+
+    public String findFacultyByColor(String color) {
+        logger.info("Was invoked method for find faculty by color");
+        return color;
+    }
+
+    public Faculty findFaculty(Long id) {
+        logger.info("Was invoked method for find faculty");
+        return findFaculty(id);
     }
 }
