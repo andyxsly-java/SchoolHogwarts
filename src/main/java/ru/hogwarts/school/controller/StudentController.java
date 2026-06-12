@@ -84,24 +84,17 @@ public class StudentController {
     public ResponseEntity<String> getStudentsParallel() {
         List<Student> students = studentRepository.findAll();
 
-        students.subList(1, 2)
+        students.subList(0, 2)
                 .forEach(student -> System.out.println(
-                        Thread.currentThread().getName() + " -> " + student.getName()
-                ));
+                        Thread.currentThread().getName() + " -> " + student.getName()));
 
         Thread thread1 = new Thread(() ->
-                students.subList(3, 4)
-                        .forEach(student -> System.out.println(
-                                Thread.currentThread().getName() + " -> " + student.getName()
-                        ))
-        );
+                students.subList(2, 4).forEach(student -> System.out.println(
+                        Thread.currentThread().getName() + " -> " + student.getName())));
 
         Thread thread2 = new Thread(() ->
-                students.subList(5, 6)
-                        .forEach(student -> System.out.println(
-                                Thread.currentThread().getName() + " -> " + student.getName()
-                        ))
-        );
+                students.subList(4, 6).forEach(student -> System.out.println(
+                        Thread.currentThread().getName() + " -> " + student.getName())));
 
         thread1.start();
         thread2.start();
@@ -110,30 +103,48 @@ public class StudentController {
     }
 
     @GetMapping("/students/print-synchronized")
-    public ResponseEntity<String> getStudentsSyn(String name) {
+    public ResponseEntity<Void> getStudentsSyn(String name) throws InterruptedException {
         List<Student> students = studentRepository.findAll();
 
-        if (students.size() < 6) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        students.subList(1, 2)
-                .forEach(student -> getStudentsSyn(student.getName()));
+        students.subList(0, 2)
+                .forEach(student -> {
+                    try {
+                        getStudentsSyn(student.getName());
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
         Thread thread1 = new Thread(() ->
-                students.subList(3, 4)
-                        .forEach(student -> getStudentsSyn(student.getName()))
+                students.subList(2, 4)
+                        .forEach(student -> {
+                            try {
+                                getStudentsSyn(student.getName());
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
         );
 
         Thread thread2 = new Thread(() ->
-                students.subList(5, 6)
-                        .forEach(student -> getStudentsSyn(student.getName()))
+                students.subList(4, 6)
+                        .forEach(student -> {
+                            try {
+                                getStudentsSyn(student.getName()).getBody();
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
         );
 
         thread1.start();
         thread2.start();
 
         return ResponseEntity.ok().build();
+    }
+
+        private synchronized void printName(String name) {
+            System.out.println(Thread.currentThread().getName() + "->" + name);
 
     }
 
